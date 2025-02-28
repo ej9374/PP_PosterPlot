@@ -8,13 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "movie")
-public class MovieEntity {
+@Table(name = "movie_list")
+public class MovieListEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "movie_id")
-    private Integer movieId;
+    @Column(name = "movie_list_id")
+    private Integer movieListId;
 
     @Column(name = "movie_1st_path")
     private String movie1stPath;
@@ -22,9 +22,9 @@ public class MovieEntity {
     @Column(name = "movie_2nd_path")
     private String movie2ndPath;
 
-    public MovieEntity() {}
+    public MovieListEntity() {}
 
-    public MovieEntity(String movie1stPath, String movie2ndPath) {
+    public MovieListEntity(String movie1stPath, String movie2ndPath) {
         this.movie1stPath = movie1stPath;
         this.movie2ndPath = movie2ndPath;
     }

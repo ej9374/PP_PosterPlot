@@ -24,7 +24,7 @@ public class CommentEntity {
     @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     private PostEntity post;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     public CommentEntity() {}
