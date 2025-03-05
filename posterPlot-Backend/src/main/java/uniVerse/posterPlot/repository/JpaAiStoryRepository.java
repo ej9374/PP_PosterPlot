@@ -12,6 +12,7 @@ public class JpaAiStoryRepository implements AiStoryRepository {
 
     private final EntityManager em;
 
+
     @Override
     public AiStoryEntity findAiStoryById(Integer aiStoryId) {
         return em.createQuery("select a from AiStoryEntity a where a.aiStoryId = :aiStoryId", AiStoryEntity.class)
