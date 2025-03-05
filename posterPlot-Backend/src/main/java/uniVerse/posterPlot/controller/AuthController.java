@@ -85,7 +85,7 @@ public class AuthController {
                     @ApiResponse(responseCode = "400", description = "인증 번호가 일치하지 않습니다.")
             }
     )
-    @GetMapping("/mailAuthCheck")
+    @PostMapping("/mailAuthCheck")
     public ResponseEntity<String> AuthCheck(@RequestBody @Valid EmailCheckDto emailCheckDto) {
         if (mailService.CheckAuthNum(emailCheckDto.getEmail(), emailCheckDto.getAuthNum())) {
             log.info("AuthNum is correct");
