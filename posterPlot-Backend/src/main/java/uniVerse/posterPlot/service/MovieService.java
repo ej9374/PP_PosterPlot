@@ -111,7 +111,7 @@ public class MovieService {
 
 
     @Transactional
-    public String sendMovieListToFlask(Integer movieListId) {
+    public Integer sendMovieListToFlask(Integer movieListId) {
 
         WebClient webClient = WebClient.builder()
                 .baseUrl("http://127.0.0.1:5000") //Flask API URL
@@ -167,10 +167,20 @@ public class MovieService {
         }
     }
 
-    public String saveAiStory(MovieListEntity movieList, String story) {
-        AiStoryEntity aiStoryEntity = new AiStoryEntity(story, movieList);
-        aiStoryRepository.save(aiStoryEntity);
-        log.info("AI 스토리 저장 완료: story={}", story);
-        return aiStoryEntity.getStory();
+    public Integer saveAiStory(MovieListEntity movieList, String story) {
+        AiStoryEntity aiStory = new AiStoryEntity(story, movieList);
+        aiStoryRepository.save(aiStory);
+        log.info("AI 스토리 저장 완료: aiStoryId={}", aiStory.getAiStoryId());
+        return aiStory.getAiStoryId();
+    }
+
+    @Transactional
+    public AiStoryEntity getAiStory(Integer aiStoryId) {
+        AiStoryEntity aiStory = aiStoryRepository.findAiStoryById(aiStoryId);
+
+        if (aiStory == null){
+            throw new RuntimeException("Ai Story를 찾을 수 없습니다.");
+        }
+        return aiStory;
     }
 }

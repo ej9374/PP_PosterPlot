@@ -42,7 +42,7 @@ public class CommentController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 유저가 아닙니다.");
             }
             commentService.createComment(user, postId, content);
-            return ResponseEntity.ok("댓글이 성공적으로 작동되었습니다.");
+            return ResponseEntity.ok("댓글이 성공적으로 작성되었습니다.");
         } catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 에러가 발생했습니다.");
         }

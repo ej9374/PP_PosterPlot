@@ -27,6 +27,6 @@ public class PostRequestDto {
     private Genre genre;
 
     @Nullable
-    @Schema(example = "1")
+    @Schema(example = "1", nullable = true, description = "AI 스토리 ID (없을 경우 null 가능)")
     private Integer aiStoryId;
 }
