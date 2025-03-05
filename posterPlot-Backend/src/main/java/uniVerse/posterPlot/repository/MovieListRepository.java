@@ -6,5 +6,5 @@ public interface MovieListRepository {
 
     public void save(MovieListEntity movieList);
 
-
+    public MovieListEntity findByMovieListId(Integer movieListId);
 }

@@ -33,7 +33,17 @@ public class MovieController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일은 반드시 2개를 업로드 해야 합니다.");
         }
 
-        movieService.uploadMovieImage(files);
-        return ResponseEntity.ok("이미지가 성공적으로 업로드 되었습니다.");
+        Integer movieListId = movieService.uploadMovieImage(user, files);
+        return ResponseEntity.ok("이미지가 성공적으로 업로드 되었습니다. movieListId = " + movieListId);
+    }
+
+    @PostMapping("/getStory")
+    public ResponseEntity<String> sendToFlask(@RequestParam("movieListId") Integer movieListId) {
+        UserEntity user = SecurityUtil.getAuthenticatedUser();
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 유저가 아닙니다.");
+
+        String story = movieService.sendMovieListToFlask(movieListId);
+        return ResponseEntity.ok(story);
     }
 }

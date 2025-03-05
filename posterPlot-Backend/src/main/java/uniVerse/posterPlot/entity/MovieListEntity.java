@@ -16,6 +16,10 @@ public class MovieListEntity {
     @Column(name = "movie_list_id")
     private Integer movieListId;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private UserEntity user;
+
     @Column(name = "movie_1st_path")
     private String movie1stPath;
 
@@ -24,7 +28,8 @@ public class MovieListEntity {
 
     public MovieListEntity() {}
 
-    public MovieListEntity(String movie1stPath, String movie2ndPath) {
+    public MovieListEntity(UserEntity user, String movie1stPath, String movie2ndPath) {
+        this.user = user;
         this.movie1stPath = movie1stPath;
         this.movie2ndPath = movie2ndPath;
     }

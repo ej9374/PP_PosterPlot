@@ -8,4 +8,8 @@ public interface AiStoryRepository {
     public AiStoryEntity findAiStoryById(Integer aiStoryId);
 
     public MovieListEntity findMovieListByAiStory(Integer aiStoryId);
+
+    public void save(AiStoryEntity aiStory);
+
+    public String findStoryByMovieListId(Integer movieListId);
 }

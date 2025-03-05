@@ -50,5 +50,6 @@ public class JpaUserRepository implements UserRepository{
                 .setParameter("userId", userId)
                 .getSingleResult();
     }
+
 }
 

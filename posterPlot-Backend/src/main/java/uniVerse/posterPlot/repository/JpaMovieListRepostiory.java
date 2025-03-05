@@ -15,4 +15,11 @@ public class JpaMovieListRepostiory implements MovieListRepository {
     public void save(MovieListEntity movieList) {
         em.persist(movieList);
     }
+
+    @Override
+    public MovieListEntity findByMovieListId(Integer movieListId) {
+        return em.createQuery("select m from MovieListEntity m where m.movieListId = :movieListId",  MovieListEntity.class)
+                .setParameter("movieListId", movieListId)
+                .getSingleResult();
+    }
 }

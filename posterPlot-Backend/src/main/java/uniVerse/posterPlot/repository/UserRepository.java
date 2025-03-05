@@ -17,4 +17,5 @@ public interface UserRepository {
     public Optional<UserEntity> findById(String id);
 
     public String findUserByUserId(Integer userId);
+
 }

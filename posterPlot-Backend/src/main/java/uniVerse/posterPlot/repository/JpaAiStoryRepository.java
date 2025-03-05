@@ -25,4 +25,14 @@ public class JpaAiStoryRepository implements AiStoryRepository {
                 .setParameter("aiStoryId", aiStoryId)
                 .getSingleResult();
     }
+
+    @Override
+    public void save(AiStoryEntity aiStory) { em.persist(aiStory);}
+
+    @Override
+    public String findStoryByMovieListId(Integer movieListId) {
+        return em.createQuery("select a.story from AiStoryEntity a where a.movieList.movieListId = :movieListId", String.class)
+                .setParameter("movieListId", movieListId)
+                .getSingleResult();
+    }
 }
