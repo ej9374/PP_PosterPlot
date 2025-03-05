@@ -13,6 +13,8 @@ security:
 tags:
   - name: AuthController
     description: AuthController API 목록
+  - name: CommentController
+    description: CommentController API 목록
 paths:
   "/posts/like":
     post:
@@ -85,6 +87,123 @@ paths:
             "*/*":
               schema:
                 type: string
+  "/movie/upload":
+    post:
+      tags:
+        - movie-controller
+      summary: 영화 포스터 업로드
+      description: 사용자가 2개의 영화 포스터 이미지를 업로드하면, 이미지가 서버에 저장됩니다.
+      operationId: uploadFile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - files
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: 이미지가 성공적으로 업로드되었습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+        '400':
+          description: 파일은 반드시 2개를 업로드 해야 합니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+        '401':
+          description: 로그인 유저가 아닙니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/movie/getStory":
+    post:
+      tags:
+        - movie-controller
+      summary: 영화 줄거리 생성 요청
+      description: Flask 서버로 movieListId를 전달하여 AI 기반 영화 줄거리를 생성합니다.
+      operationId: sendToFlask
+      parameters:
+        - name: movieListId
+          in: query
+          description: 업로드된 영화 포스터에 해당하는 ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: 영화 줄거리가 성공적으로 생성되었습니다. aiStoryId 반환
+          content:
+            "*/*":
+              schema:
+                type: object
+        '400':
+          description: 올바르지 않은 요청입니다. movieListId가 유효하지 않거나 데이터가 없습니다.
+          content:
+            "*/*":
+              schema:
+                type: object
+        '401':
+          description: 로그인이 필요합니다.
+          content:
+            "*/*":
+              schema:
+                type: object
+        '500':
+          description: Flask API 호출 중 서버 오류가 발생했습니다.
+          content:
+            "*/*":
+              schema:
+                type: object
+  "/comment/create":
+    post:
+      tags:
+        - CommentController
+      summary: 댓글 작성
+      description: 로그인된 사용자가 특정 게시글에 댓글을 작성합니다.
+      operationId: createComment
+      parameters:
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: postId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: 댓글이 성공적으로 작성되었습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+        '401':
+          description: 로그인하지 않은 사용자입니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+        '500':
+          description: 서버 에러가 발생했습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
   "/auth/signUp":
     post:
       tags:
@@ -141,6 +260,32 @@ paths:
                 type: string
         '500':
           description: 서버 에러가 발생했습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/auth/mailAuthCheck":
+    post:
+      tags:
+        - AuthController
+      summary: 이메일 인증 확인
+      description: 인증 번호가 일치하는지 확인합니다.
+      operationId: AuthCheck
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EmailCheckDto"
+        required: true
+      responses:
+        '200':
+          description: 인증 번호가 일치합니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+        '400':
+          description: 인증 번호가 일치하지 않습니다.
           content:
             "*/*":
               schema:
@@ -399,32 +544,70 @@ paths:
             "*/*":
               schema:
                 type: string
-  "/auth/mailAuthCheck":
+  "/movie/aiStory":
     get:
       tags:
-        - AuthController
-      summary: 이메일 인증 확인
-      description: 인증 번호가 일치하는지 확인합니다.
-      operationId: AuthCheck
+        - movie-controller
+      summary: 사용자의 AI Story 조회
+      description: 현재 로그인한 사용자의 AI Story를 조회하여 반환합니다.
+      operationId: getAiStory_1
       parameters:
-        - name: emailCheckDto
+        - name: aiStoryId
           in: query
           required: true
           schema:
-            "$ref": "#/components/schemas/EmailCheckDto"
+            type: integer
+            format: int32
       responses:
         '200':
-          description: 인증 번호가 일치합니다.
+          description: AI Story 반환 성공
           content:
             "*/*":
               schema:
                 type: string
         '400':
-          description: 인증 번호가 일치하지 않습니다.
+          description: Ai Story를 찾을 수 없습니다.
           content:
             "*/*":
               schema:
                 type: string
+        '500':
+          description: 서버 에러가 발생했습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/comment/list/{postId}":
+    get:
+      tags:
+        - CommentController
+      summary: 댓글 목록 조회
+      description: 특정 게시글에 대한 모든 댓글을 조회합니다.
+      operationId: getCommentList
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: 댓글 목록을 반환합니다.
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/CommentListResponseDto"
+        '500':
+          description: 서버 에러가 발생했습니다.
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/CommentListResponseDto"
   "/auth/checkPassword":
     get:
       tags:
@@ -521,6 +704,45 @@ paths:
             "*/*":
               schema:
                 type: string
+  "/comment/delete/{commentId}":
+    delete:
+      tags:
+        - CommentController
+      summary: 댓글 삭제
+      description: 로그인된 사용자가 자신의 댓글을 삭제합니다.
+      operationId: deleteComment
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: 댓글이 성공적으로 삭제되었습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+        '400':
+          description: 해당 댓글을 찾을 수 없습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+        '403':
+          description: 댓글 삭제 권한이 없습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
+        '500':
+          description: 서버 에러가 발생했습니다.
+          content:
+            "*/*":
+              schema:
+                type: string
 components:
   schemas:
     PostRequestDto:
@@ -566,7 +788,9 @@ components:
             - THRILLER
         aiStoryId:
           type: integer
+          description: AI 스토리 ID (없을 경우 null 가능)
           format: int32
+          nullable: true
           example: 1
     SignUpRequestDto:
       required:
@@ -586,6 +810,18 @@ components:
         email:
           type: string
           example: user123@gmail.com
+    EmailCheckDto:
+      required:
+        - authNum
+        - email
+      type: object
+      properties:
+        email:
+          type: string
+          example: user123@gmail.com
+        authNum:
+          type: string
+          example: '123456'
     LoginRequestDto:
       type: object
       properties:
@@ -644,18 +880,17 @@ components:
         id:
           type: string
           example: user123
-    EmailCheckDto:
-      required:
-        - authNum
-        - email
+    CommentListResponseDto:
       type: object
       properties:
-        email:
+        commentId:
+          type: integer
+          format: int32
+        userId:
+          type: integer
+          format: int32
+        content:
           type: string
-          example: user123@gmail.com
-        authNum:
-          type: string
-          example: '123456'
   securitySchemes:
     JWT:
       type: http
