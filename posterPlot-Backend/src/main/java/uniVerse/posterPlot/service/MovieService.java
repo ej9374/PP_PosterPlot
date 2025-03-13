@@ -26,6 +26,7 @@ import uniVerse.posterPlot.repository.UserRepository;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,17 +44,20 @@ public class MovieService {
     private Storage storage;
 
     {
-        try {
+        try (InputStream inputStream = getClass().getResourceAsStream("/gcp-keys/posterplot-key.json")) {
+            if (inputStream == null) {
+                throw new RuntimeException("gcp-keys/posterplot-key.json 리소스를 찾을 수 없습니다.");
+            }
+
             storage = StorageOptions.newBuilder()
-                    .setCredentials(ServiceAccountCredentials.fromStream(
-                            new FileInputStream("src/main/resources/gcp-keys/posterplot-key.json") // 🔥 예외 처리 추가
-                    ))
+                    .setCredentials(ServiceAccountCredentials.fromStream(inputStream))
                     .build()
                     .getService();
         } catch (IOException e) {
             throw new RuntimeException("GCP 인증 키 파일을 로드할 수 없습니다: " + e.getMessage(), e);
         }
     }
+
 
     //영화 포스터 유저가 업로드 하는 메서드
     @Transactional
@@ -114,7 +118,7 @@ public class MovieService {
     public Integer sendMovieListToFlask(Integer movieListId) {
 
         WebClient webClient = WebClient.builder()
-                .baseUrl("http://127.0.0.1:5000") //Flask API URL
+                .baseUrl("http://34.84.174.46:5000") //Flask API URL
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
