@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uniVerse.posterPlot.dto.PostListHomeResponseDto;
 import uniVerse.posterPlot.dto.PostListResponseDto;
 import uniVerse.posterPlot.dto.PostRequestDto;
 import uniVerse.posterPlot.dto.PostResponseDto;
@@ -158,6 +159,24 @@ public class PostController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @Operation(
+            summary = "Home에 게시글 조회수 TOP 3 띄우기",
+            description = "게시글 조회수 TOP 3 Home에 띄웁니다." ,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "게시글 목록 반환 성공"),
+                    @ApiResponse(responseCode = "500", description = "서버 내부 오류 발생")
+            }
+    )
+    @GetMapping("/home/top_likes")
+    public ResponseEntity<List<PostListHomeResponseDto>> getTopLikesHome(){
+        try{
+            List<PostListHomeResponseDto> posts = postService.getPostsHomeTopLikes();
+            return ResponseEntity.ok(posts);
+        } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

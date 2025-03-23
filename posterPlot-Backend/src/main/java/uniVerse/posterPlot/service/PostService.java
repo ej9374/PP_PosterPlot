@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import uniVerse.posterPlot.dto.PostListHomeResponseDto;
 import uniVerse.posterPlot.dto.PostListResponseDto;
 import uniVerse.posterPlot.dto.PostRequestDto;
 import uniVerse.posterPlot.dto.PostResponseDto;
@@ -184,6 +185,28 @@ public class PostService {
         return responseList;
     }
 
+    //home
+    public List<PostListHomeResponseDto> getPostsHomeTopLikes(){
+        List<Integer> postIds = postRepository.findTopLikesPost();
+        if (postIds.isEmpty())
+            return Collections.emptyList();
+
+        List<String> titles = getTitlesByPostIds(postIds);
+        List<Integer> userIds = getUserIdsByPostIds(postIds);
+        List<MovieListEntity> movieLists = getMovieListsByPostIds(postIds);
+
+        List<String> users = new ArrayList<>();
+        for (int i = 0; i< userIds.size(); i++){
+            users.add(userRepository.findUserByUserId(userIds.get(i)));
+        }
+        List<PostListHomeResponseDto> responseList = new ArrayList<>();
+
+        for (int i = 0; i < postIds.size(); i++) {
+            responseList.add(new PostListHomeResponseDto(postIds.get(i), titles.get(i), users.get(i), movieLists.get(i).getMovie1stPath(), movieLists.get(i).getMovie2ndPath()));
+        }
+        return responseList;
+    }
+
     // 유저별 글 조회하기 -> 마이페이지
     public List<PostListResponseDto> getPostsByUser(Integer userId){
         List<Integer> postIds = postRepository.findAllByUserId(userId);
@@ -240,6 +263,15 @@ public class PostService {
 
     public List<Integer> getUserIdsByPostIds(List<Integer> postIds){
         return postRepository.findUsersByPostIds(postIds);
+    }
+
+    public List<MovieListEntity> getMovieListsByPostIds(List<Integer> postIds){
+        List<MovieListEntity> movieLists = new ArrayList<>();
+        for (Integer postId : postIds){
+            MovieListEntity movieList = aiStoryRepository.findMovieListByAiStory(postRepository.findAiStoryId(postId));
+            movieLists.add(movieList);
+        }
+        return movieLists;
     }
 
     // 게시글 좋아요 기능

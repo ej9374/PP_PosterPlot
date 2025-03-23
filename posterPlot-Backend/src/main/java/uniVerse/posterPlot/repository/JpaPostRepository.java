@@ -84,4 +84,11 @@ public class JpaPostRepository implements PostRepository {
                 .setParameter("postIds", postIds)
                 .getResultList();
     }
+
+    @Override
+    public Integer findAiStoryId(Integer postId) {
+        return em.createQuery("select p.aiStory from PostEntity p where p.postId = :postId", Integer.class)
+                .setParameter("postId", postId)
+                .getSingleResult();
+    }
 }

@@ -29,4 +29,6 @@ public interface PostRepository {
     public List<String> findTitlesByPostIds(List<Integer> postIds);
 
     public List<Integer> findUsersByPostIds(List<Integer> postIds);
+
+    public Integer findAiStoryId(Integer postId);
 }
