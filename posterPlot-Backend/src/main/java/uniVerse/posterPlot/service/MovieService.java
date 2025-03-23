@@ -118,7 +118,7 @@ public class MovieService {
     public Integer sendMovieListToFlask(Integer movieListId) {
 
         WebClient webClient = WebClient.builder()
-                .baseUrl("http://34.84.174.46:5000") //Flask API URL
+                .baseUrl("http://127.0.0.1:5000") //Flask API URL
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
@@ -140,7 +140,7 @@ public class MovieService {
         try {
             ReceiveFlaskResponseDto flaskResponseDto
                     = webClient.post()
-                    .uri("generate_story")
+                    .uri("/generate_story")
                     .bodyValue(flaskRequestDto)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, response -> {
