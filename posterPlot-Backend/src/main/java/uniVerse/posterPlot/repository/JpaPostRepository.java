@@ -7,6 +7,8 @@ import uniVerse.posterPlot.entity.Genre;
 import uniVerse.posterPlot.entity.PostEntity;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Repository
@@ -73,17 +75,38 @@ public class JpaPostRepository implements PostRepository {
 
     @Override
     public List<String> findTitlesByPostIds(List<Integer> postIds) {
-        return em.createQuery("select p.title from PostEntity p where p.postId in :postIds order by p.postId desc", String.class)
+        Map<Integer, String> postIdToTitle = em.createQuery(
+                        "select p.postId, p.title from PostEntity p where p.postId in :postIds", Object[].class)
                 .setParameter("postIds", postIds)
-                .getResultList();
+                .getResultList()
+                .stream()
+                .collect(Collectors.toMap(
+                        result -> (Integer) result[0],
+                        result -> (String) result[1]
+                ));
+
+        return postIds.stream()
+                .map(postIdToTitle::get)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Integer> findUsersByPostIds(List<Integer> postIds) {
-        return em.createQuery("select p.user.userId from PostEntity p where p.postId in :postIds order by p.postId desc", Integer.class)
+        Map<Integer, Integer> postIdToUserId = em.createQuery(
+                        "select p.postId, p.user.userId from PostEntity p where p.postId in :postIds", Object[].class)
                 .setParameter("postIds", postIds)
-                .getResultList();
+                .getResultList()
+                .stream()
+                .collect(Collectors.toMap(
+                        result -> (Integer) result[0],
+                        result -> (Integer) result[1]
+                ));
+
+        return postIds.stream()
+                .map(postIdToUserId::get)
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public Integer findAiStoryId(Integer postId) {
