@@ -1,9 +1,6 @@
 # PosterPlot
 AI 기반 줄거리 생성과 유저 작성 시나리오를 바탕으로 시나리오 열람 기능을 제공하는 웹 플랫폼
 
-<img src="https://user-images.githubusercontent.com/your-uploaded-image.png" width="600"/>
-
-
 # PosterPlot Backend (Spring + Flask + MySQL)
 
 이 프로젝트는 영화 포스터 기반 AI 줄거리 생성 시스템의 백엔드입니다.  
