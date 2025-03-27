@@ -16,4 +16,4 @@ RUN pip install --upgrade pip \
 EXPOSE 5000
 
 # 앱 실행
-CMD ["python", "posterplot_flask.py"]
+CMD ["python", "posterplot_ai.py"]
