@@ -40,7 +40,7 @@ public class MovieService {
     private final MovieListRepository movieListRepository;
     private final AiStoryRepository aiStoryRepository;
     private final UserRepository userRepository;
-    private final String bucketName = "posterplot-movie-images";  // GCP 버킷 이름
+    private final String bucketName = "posterplot-movie-image";  // GCP 버킷 이름
     private Storage storage;
 
     {
