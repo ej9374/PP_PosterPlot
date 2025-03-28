@@ -11,7 +11,7 @@ import time
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}) 
+CORS(app, resources={r"/*": {"origins": "*"}})    # 추가가
 
 #  모델 로드
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -39,7 +39,7 @@ def clean_repeated_words(text):
     return text.strip().capitalize()
 
 def translate_to_korean(text):
-    
+    """Mtranslate 라이브러리를 사용하여 번역"""
     return translate_text_mtranslate(text)
 
 
@@ -114,12 +114,12 @@ def generate_story():
     """GCS URL을 받아 BLIP과 Mistral-7B를 사용해 줄거리 생성"""
 
     if not request.is_json:
-        print("ERROR: 요청이 JSON 형식이 아님!")
+        print("🚨 ERROR: 요청이 JSON 형식이 아님!")
         return jsonify({"error": "Invalid JSON format"}), 400
 
     
     data = request.json
-    image_urls = data.get("image_urls", [])  # GCS URL 리스트
+    image_urls = data.get("image_urls", [])  # GCS URL 리스트 >>>수정하기<<<
     movie_list_id = data.get("movieListId")  # movieListId 받기
     
     if not image_urls:
