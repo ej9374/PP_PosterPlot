@@ -1,22 +1,29 @@
 version: '3.8'
 
 services:
+  flask:
+    build: ./
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/generate_story"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   backend:
     build: ./posterPlot-Backend
     ports:
       - "8080:8080"
     depends_on:
-      - flask
-      - db
+      flask:
+        condition: service_healthy
+      db:
+        condition: service_started
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/posterplot
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=user123
-
-  flask:
-    build: ./ 
-    ports:
-      - "5000:5000"
 
   db:
     image: mysql:8.0
@@ -31,3 +38,4 @@ services:
 
 volumes:
   db-data:
+
