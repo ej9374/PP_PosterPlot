@@ -109,9 +109,9 @@ def generate_movie_story(blip_description):
     else:
         return f"API 요청 실패: {response.status_code}\\n응답: {response.text}"
 
-@app.route("/generate_story", methods=["GET"])
-def healthcheck():
-    return "Flask is alive!", 200
+@app.route("/ping", methods=["GET"])
+def ping():
+    return "pong", 200
 
 
 @app.route("/generate_story", methods=["POST"])
