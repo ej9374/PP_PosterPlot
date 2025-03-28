@@ -109,6 +109,11 @@ def generate_movie_story(blip_description):
     else:
         return f"API 요청 실패: {response.status_code}\\n응답: {response.text}"
 
+@app.route("/generate_story", methods=["GET"])
+def healthcheck():
+    return "Flask is alive!", 200
+
+
 @app.route("/generate_story", methods=["POST"])
 def generate_story():
     """GCS URL을 받아 BLIP과 Mistral-7B를 사용해 줄거리 생성"""
