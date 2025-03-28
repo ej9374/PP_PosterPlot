@@ -1,6 +1,9 @@
 # Python 3.12.4 기반 이미지 사용
 FROM python:3.12.4-slim
 
+# curl 설치 (healthcheck에서 사용됨)
+RUN apt-get update && apt-get install -y curl
+
 # 작업 디렉토리 설정
 WORKDIR /app
 
