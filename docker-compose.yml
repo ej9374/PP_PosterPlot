@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/generate_story"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/ping"]
       interval: 5s
       timeout: 3s
       retries: 5
