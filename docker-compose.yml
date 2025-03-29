@@ -16,10 +16,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      flask:
-        condition: service_healthy
-      db:
-        condition: service_started
+      - flask
+      - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/posterplot
       - SPRING_DATASOURCE_USERNAME=root
