@@ -19,7 +19,7 @@ processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base
 model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base").to(device)
 
 #  OpenRouter API 설정
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "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"
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 HEADERS = {
     "Authorization": f"Bearer {OPENROUTER_API_KEY}",
