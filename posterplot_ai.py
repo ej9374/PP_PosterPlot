@@ -1,31 +1,31 @@
 from flask import Flask, request, jsonify
+from dotenv import load_dotenv
 import torch
 from transformers import BlipProcessor, BlipForConditionalGeneration
 from PIL import Image
 import requests
 from mtranslate import translate
 import re
-from flask_cors import CORS # 추가
+from flask_cors import CORS
 import time
+import os
 
-
+load_dotenv()  # .env 파일 자동 로드
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})    # 추가가
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-#  모델 로드
+# 모델 로드
 device = "cuda" if torch.cuda.is_available() else "cpu"
 processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
 model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base").to(device)
 
-#  OpenRouter API 설정
-OPENROUTER_API_KEY = "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"
-API_URL = "https://openrouter.ai/api/v1/chat/completions"
-HEADERS = {
-    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-    "Content-Type": "application/json",
-    "X-Title": "Movie Story Generator",
-    "User-Agent": "PosterPlot-Flask/1.0"
+# Hugging Face API 설정
+HUGGINGFACE_API_KEY = os.getenv("HF_TOKEN")  # <- Hugging Face에서 발급받은 토큰으로 교체
+HF_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
+HF_HEADERS = {
+    "Authorization": f"Bearer {HUGGINGFACE_API_KEY}",
+    "Content-Type": "application/json"
 }
 
 
@@ -42,9 +42,6 @@ def clean_repeated_words(text):
 def translate_to_korean(text):
     """Mtranslate 라이브러리를 사용하여 번역"""
     return translate_text_mtranslate(text)
-
-
-
 
 def download_image(image_url):
     """GCS URL에서 이미지 다운로드"""
@@ -64,15 +61,12 @@ def generate_caption(image):
     return caption
 
 def clean_text(text):
-
-    text = re.sub(r'\u200b', '', text)  
-    text = re.sub(r'(\b\w+\b)( \1)+', r'\1', text)  
-    text = text.strip() 
-    return text
+    text = re.sub(r'\u200b', '', text)
+    text = re.sub(r'(\b\w+\b)( \1)+', r'\1', text)
+    return text.strip()
 
 def generate_movie_story(blip_description):
-
-    """Mistral-7B API를 사용하여 영화 줄거리 생성"""
+    """Mistral-7B API (via Hugging Face)로 영화 줄거리 생성"""
     prompt = f"""
     🎬 영화 줄거리 생성 요청 🎬
 
@@ -83,7 +77,7 @@ def generate_movie_story(blip_description):
     🔹 이 장면을 기반으로 창의적인 영화 줄거리를 작성하세요.
     🔹 영화의 시작, 중반, 결말을 포함하도록 해 주세요.
 
-     📌 **출력 형식 예시 (반드시 이 형식을 따르세요)**:
+    📌 **출력 형식 예시 (반드시 이 형식을 따르세요)**:
     ---
     제목: [영화 제목]
     등장인물: [주인공, 조연 등]
@@ -92,28 +86,30 @@ def generate_movie_story(blip_description):
     ---
     반드시 위의 출력 형식을 그대로 유지하여 작성해주세요.
     """
-    
-    time.sleep(1) #속도제한회피
 
-    data = {
-        "model": "mistralai/mistral-7b-instruct:free",
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 1500,
-        "temperature": 0.7,
-        "top_p": 0.9,
+    time.sleep(1)
+
+    payload = {
+        "inputs": prompt, #strip() 추가시 프롬포트 한줄로 출력
+        "parameters": {
+            "max_new_tokens": 1500,
+            "temperature": 0.7,
+            "top_p": 0.9,
+            "return_full_text": False
+        }
     }
-    
-    response = requests.post(API_URL, headers=HEADERS, json=data)
+
+    response = requests.post(HF_API_URL, headers=HF_HEADERS, json=payload)
     if response.status_code == 200:
-        completion = response.json()
-        return completion['choices'][0]['message']['content']
+        result = response.json()
+        return result[0]["generated_text"]
     else:
-        return f"API 요청 실패: {response.status_code}\\n응답: {response.text}"
+        return f"API 요청 실패: {response.status_code}\n응답: {response.text}"
+
 
 @app.route("/ping", methods=["GET"])
 def ping():
     return "pong", 200
-
 
 @app.route("/generate_story", methods=["POST"])
 def generate_story():
@@ -131,7 +127,7 @@ def generate_story():
         if not image_urls:
             app.logger.warning("⚠️ image_urls 비어 있음")
             return jsonify({"error": "No image URLs provided"}), 400
-
+        
         captions = []
         for url in image_urls:
             app.logger.info(f"🖼️ 이미지 다운로드 중: {url}")
