@@ -1,0 +1,26 @@
+# Python 관련
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.env
+
+# VSCode 등 IDE 설정
+.vscode/
+*.code-workspace
+
+# OS 관련
+.DS_Store
+
+# 로그 파일
+*.log
+
+# Docker
+*.pid
+*.db
+*.sqlite3
+
+# 기타
+.env.*
+.env
