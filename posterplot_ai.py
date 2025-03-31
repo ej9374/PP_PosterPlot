@@ -116,39 +116,54 @@ def ping():
 
 @app.route("/generate_story", methods=["POST"])
 def generate_story():
-    """GCS URL을 받아 BLIP과 Mistral-7B를 사용해 줄거리 생성"""
+    try:
+        app.logger.info("📩 Story generation 요청 도착")
 
-    if not request.is_json:
-        print("🚨 ERROR: 요청이 JSON 형식이 아님!")
-        return jsonify({"error": "Invalid JSON format"}), 400
+        if not request.is_json:
+            app.logger.error("🚨 요청이 JSON 형식이 아님")
+            return jsonify({"error": "Invalid JSON format"}), 400
 
-    
-    data = request.json
-    image_urls = data.get("image_urls", [])  # GCS URL 리스트 >>>수정하기<<<
-    movie_list_id = data.get("movieListId")  # movieListId 받기
-    
-    if not image_urls:
-        print("⚠️ No image URLs provided")
-        return jsonify({"error": "No image URLs provided"}), 400
-    
-    captions = []
-    for url in image_urls:
-        image = download_image(url)
-        if image:
-            caption = generate_caption(image)
-            captions.append(clean_text(caption))
-        else:
-            return jsonify({"error": f"Failed to download image from {url}"}), 400
-    
-    combined_description = " ".join(captions)
-    generated_story = generate_movie_story(combined_description)
-    translated_story = translate_to_korean(generated_story)
-    
-    response_data = {
-        "movieListId": movie_list_id,
-        "generated_story": translated_story
-    }
-    return jsonify(response_data)
+        data = request.json
+        image_urls = data.get("image_urls", [])
+        movie_list_id = data.get("movieListId")
+
+        if not image_urls:
+            app.logger.warning("⚠️ image_urls 비어 있음")
+            return jsonify({"error": "No image URLs provided"}), 400
+
+        captions = []
+        for url in image_urls:
+            app.logger.info(f"🖼️ 이미지 다운로드 중: {url}")
+            image = download_image(url)
+            if image:
+                caption = generate_caption(image)
+                app.logger.info(f"📸 캡션 생성 완료: {caption}")
+                captions.append(clean_text(caption))
+            else:
+                app.logger.error(f"❌ 이미지 다운로드 실패: {url}")
+                return jsonify({"error": f"Failed to download image from {url}"}), 400
+
+        combined_description = " ".join(captions)
+        app.logger.info(f"🧠 생성할 전체 설명: {combined_description}")
+
+        generated_story = generate_movie_story(combined_description)
+        app.logger.info("📖 영어 줄거리 생성 완료")
+
+        translated_story = translate_to_korean(generated_story)
+        app.logger.info("🌐 한국어 번역 완료")
+
+        response_data = {
+            "movieListId": movie_list_id,
+            "generated_story": translated_story
+        }
+
+        app.logger.info("✅ 줄거리 생성 응답 완료")
+        return jsonify(response_data)
+
+    except Exception as e:
+        app.logger.exception("🔥 예외 발생:")
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
