@@ -24,7 +24,7 @@ API_URL = "https://openrouter.ai/api/v1/chat/completions"
 HEADERS = {
     "Authorization": f"Bearer {OPENROUTER_API_KEY}",
     "Content-Type": "application/json",
-    "X-Title": "Movie Story Generator"
+    "X-Title": "Movie Story Generator",
     "User-Agent": "PosterPlot-Flask/1.0"
 }
 
