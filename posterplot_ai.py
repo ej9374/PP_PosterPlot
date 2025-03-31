@@ -25,6 +25,7 @@ HEADERS = {
     "Authorization": f"Bearer {OPENROUTER_API_KEY}",
     "Content-Type": "application/json",
     "X-Title": "Movie Story Generator"
+    "User-Agent": "PosterPlot-Flask/1.0"
 }
 
 
