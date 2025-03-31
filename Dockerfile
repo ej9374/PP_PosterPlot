@@ -10,7 +10,8 @@ WORKDIR /app
 # pip 최신화 및 의존성 설치
 RUN pip install --upgrade pip \
     && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu \
-    && pip install transformers pillow requests flask flask-cors mtranslate
+    && pip install transformers pillow requests flask flask-cors mtranslate python-dotenv
+
 # 코드 복사 (맨 나중에)
 COPY . .
 
@@ -19,3 +20,4 @@ EXPOSE 5000
 
 # 앱 실행
 CMD ["python", "posterplot_ai.py"]
+
