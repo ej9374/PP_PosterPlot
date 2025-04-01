@@ -69,6 +69,12 @@ public class JpaPostRepository implements PostRepository {
     public void delete(Integer postId) {
         PostEntity post = findByPostId(postId);
         if (post != null) {
+            em.createQuery("delete from CommentEntity c where c.post.postId = :postId")
+                    .setParameter("postId", postId)
+                    .executeUpdate();
+            em.createQuery("delete from PostLikeEntity pl where pl.post.postId = :postId")
+                    .setParameter("postId", postId)
+                    .executeUpdate();
             em.remove(post);
         }
     }

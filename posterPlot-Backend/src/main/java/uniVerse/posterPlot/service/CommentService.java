@@ -58,6 +58,8 @@ public class CommentService {
         if (post == null) {
             throw new EntityNotFoundException("게시글을 찾을 수 없습니다. postId: " + postId);
         }
+
+
         List<Integer> commentIds = commentRepository.findAllByPostId(postId);
         if (commentIds.isEmpty())
             return Collections.emptyList();
@@ -65,7 +67,7 @@ public class CommentService {
         List<CommentListResponseDto> responseList = new ArrayList<>();
         for (int i = 0; i < commentIds.size(); i++) {
             CommentEntity comment = commentRepository.findByCommentId(commentIds.get(i));
-            responseList.add(new CommentListResponseDto(comment.getCommentId(), comment.getUser().getUserId(), comment.getContent()));
+            responseList.add(new CommentListResponseDto(comment.getCommentId(), comment.getUser().getUserId(), comment.getUser().getId(), comment.getContent()));
         }
         return responseList;
     }

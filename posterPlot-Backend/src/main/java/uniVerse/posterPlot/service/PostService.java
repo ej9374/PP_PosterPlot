@@ -120,7 +120,7 @@ public class PostService {
         List<PostListResponseDto> responseList = new ArrayList<>();
 
         for (int i = 0; i < postIds.size(); i++) {
-            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), users.get(i)));
+            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), userIds.get(i), users.get(i)));
         }
         return responseList;
     }
@@ -140,7 +140,7 @@ public class PostService {
         List<PostListResponseDto> responseList = new ArrayList<>();
 
         for (int i = 0; i < postIds.size(); i++) {
-            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), users.get(i)));
+            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), userIds.get(i), users.get(i)));
         }
         return responseList;
     }
@@ -160,7 +160,7 @@ public class PostService {
         List<PostListResponseDto> responseList = new ArrayList<>();
 
         for (int i = 0; i < postIds.size(); i++) {
-            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), users.get(i)));
+            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), userIds.get(i), users.get(i)));
         }
         return responseList;
     }
@@ -180,7 +180,7 @@ public class PostService {
         List<PostListResponseDto> responseList = new ArrayList<>();
 
         for (int i = 0; i < postIds.size(); i++) {
-            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), users.get(i)));
+            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), userIds.get(i), users.get(i)));
         }
         return responseList;
     }
@@ -202,7 +202,7 @@ public class PostService {
         List<PostListHomeResponseDto> responseList = new ArrayList<>();
 
         for (int i = 0; i < postIds.size(); i++) {
-            responseList.add(new PostListHomeResponseDto(postIds.get(i), titles.get(i), users.get(i), movieLists.get(i).getMovie1stPath(), movieLists.get(i).getMovie2ndPath()));
+            responseList.add(new PostListHomeResponseDto(postIds.get(i), titles.get(i), userIds.get(i), users.get(i), movieLists.get(i).getMovie1stPath(), movieLists.get(i).getMovie2ndPath()));
         }
         return responseList;
     }
@@ -218,7 +218,7 @@ public class PostService {
         List<PostListResponseDto> responseList = new ArrayList<>();
 
         for (int i = 0; i < postIds.size(); i++) {
-            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), user));
+            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), userId, user));
         }
         return responseList;
     }
@@ -238,7 +238,7 @@ public class PostService {
         List<PostListResponseDto> responseList = new ArrayList<>();
 
         for (int i = 0; i < postIds.size(); i++) {
-            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), users.get(i)));
+            responseList.add(new PostListResponseDto(postIds.get(i), titles.get(i), userIds.get(i), users.get(i)));
         }
         return responseList;
     }
