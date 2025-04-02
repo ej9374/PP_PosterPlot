@@ -1,0 +1,86 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  padding: 120px 0px;
+  flex-direction: column;
+  align-items: center; /*수직 가운데 정렬*/
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.container > * {
+  width: 100%; /*내부 요소들이 컨테이너의 너비를 따르게*/
+  max-width: 800px;
+  text-align: center;
+}
+
+.genreButtons {
+  width: 800px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 3px; /* 버튼 사이 간격 */
+}
+
+.genreButton {
+  padding: 8px 10px;
+  border: none;
+  background-color: white;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.genreButton:hover {
+  background-color: lightgray;
+}
+
+.selectedGenre {
+  background-color: #c21807;
+  color: white;
+  font-weight: bold;
+}
+
+.selectedGenre:hover {
+  background-color: #7c0a02;
+}
+
+.select {
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+}
+
+.select:focus {
+  outline: none;
+  border: 2px solid #c21807;
+}
+
+.select option:checked {
+  background-color: lightgray;
+  color: black;
+}
+
+.postlist {
+  align-items: center; /*수직 가운데 정렬*/
+  justify-content: center; /*수평 가운데 정렬*/
+  gap: 10px;
+}
+
+.post {
+  border-bottom: white 1px solid;
+  width: 100%; /*내부 요소들이 컨테이너의 너비를 따르게*/
+  display: flex;
+}
+
+.post p:nth-child(1) {
+  flex: 1;
+}
+.post p:nth-child(2) {
+  flex: 7;
+  text-align: justify;
+}
+.post p:nth-child(3) {
+  flex: 1;
+}

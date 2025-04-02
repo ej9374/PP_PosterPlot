@@ -1,0 +1,100 @@
+@font-face {
+  font-family: "GmarketSansMedium";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.titleFont {
+  font-family: GmarketSansMedium;
+}
+
+.nameFont {
+  font-family: Pretendard-Regular;
+}
+/*
+.container {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  수직 가운데 정렬 
+  justify-content: center;  수평 가운데 정렬
+  gap: 10px;
+}
+
+.container > * {
+  width: 100%; 내부 요소들이 컨테이너의 너비를 따르게
+  max-width: 800px;
+  text-align: center;
+}
+
+.centerflex {
+  display: flex;
+  justify-content: center;  수평 가운데 정렬 
+}*/
+
+.xyCenter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.header {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  padding: 10px;
+  width: 200px;
+  height: 85px;
+  top: 0%;
+  text-align: right;
+  z-index: 999;
+}
+
+.header div {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.header h1:hover + div,
+.header div:hover {
+  opacity: 1;
+  visibility: visible;
+}
+
+.header p {
+  transition: font-size 0.3s ease-in-out; /* 0.3초 동안 부드럽게 변화 */
+}
+
+.header p:hover {
+  font-size: 120%;
+  font-weight: bold;
+}
+
+.fadeIn {
+  opacity: 0;
+  transform: translateY(30px); /* 아래에서 올라오는 효과 */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fadeIn.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

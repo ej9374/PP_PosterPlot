@@ -1,0 +1,81 @@
+input {
+  background-color: black;
+  width: 300px;
+  height: 45px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: white;
+  padding: 0 10px; /* 좌우 여백 */
+  box-sizing: border-box; /* padding과 border를 포함한 크기 설정 */
+}
+
+label {
+  width: 120px;
+  display: inline-block; /* 라벨과 버튼이 같은 라인에 올 수 있게 함 */
+}
+
+input:focus {
+  /* 포커스 시 */
+  border: 2px solid white;
+  outline: none;
+}
+
+.signupContainer input {
+  /* signup 페이지에서만 아래 내용 적용 */
+  width: 450px;
+}
+
+.container {
+  background-color: #2f2f2f;
+  padding: 40px 60px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+}
+
+.button {
+  background-color: white;
+  color: black;
+  width: 300px;
+  height: 45px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.button:disabled {
+  /* 비활성화 시 아래 내용 적용 */
+  background-color: #d3d3d3;
+  color: #898989;
+  cursor: not-allowed;
+}
+
+.button:hover {
+  background-color: #c21807;
+  color: white;
+}
+
+.button:disabled:hover {
+  background-color: #d3d3d3;
+  color: #898989;
+}
+
+.authNumButton {
+  margin-top: 8px;
+  background-color: white;
+  color: black;
+  width: 100px;
+  height: 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.authNumButton:disabled {
+  /* 비활성화 시 아래 내용 적용 */
+  background-color: #d3d3d3;
+  color: #898989;
+  cursor: not-allowed;
+}

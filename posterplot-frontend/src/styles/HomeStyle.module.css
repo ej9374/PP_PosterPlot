@@ -1,0 +1,62 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; /* 요소들을 세로로 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  gap: 10px;
+  padding: 100px 0px;
+  box-sizing: border-box;
+}
+
+.container > * {
+  width: 100%; /* 내부 요소들이 컨테이너의 너비를 따르게 */
+  max-width: 800px;
+  text-align: center;
+}
+
+.greetingSection {
+  margin: 150px 0px;
+}
+
+.greetingSection h1 {
+  font-size: 64px;
+  margin: 0px;
+}
+
+.greetingSection p {
+  font-size: 24px;
+  color: lightgrey;
+}
+
+.guideSection p {
+  font-size: 18px;
+}
+
+.guide {
+  margin-bottom: 100px;
+}
+
+.guideSection img {
+  width: 200px;
+  height: 250px;
+  object-fit: contain;
+  padding: 0;
+}
+
+.top3Container {
+  width: 100%;
+  gap: 10px;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.top3Container > * {
+  flex: 1; /* 모든 요소가 동일한 크기를 가짐 */
+  transition: transform 0.3s ease-in-out; /* hover 애니메이션 추가 */
+}
+
+.top3Container > *:hover {
+  transform: scale(1.1); /* hover 시 10% 확대 */
+}
