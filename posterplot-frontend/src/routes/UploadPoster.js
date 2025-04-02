@@ -37,27 +37,16 @@ const TypingText = ({ text, speed }) => {
   );
 };
 
-// upload poster -> fetch movieListid
-const uploadPosterToServer = async (formData) => {
-  try {
-    const response = await axios.post(`${BACKEND_URL}/movie/upload`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error uploading poster:", error);
-  }
-};
+const processMoviePoster = async (formData) => {
+  let movieListId = null;
+  let aiStoryId = null;
+  let aiStoryText = null;
 
-// upload movieListId -> fetch AI Story id
-const fetchAIStoryIdFromServer = async (movieListId) => {
+  // upload poster -> fetch movieListid
   try {
-    const response = await axios.post(
-      `${BACKEND_URL}/movie/getStory`,
-      movieListId,
+    const uploadResponse = await axios.post(
+      `${BACKEND_URL}/movie/upload`,
+      formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -65,22 +54,48 @@ const fetchAIStoryIdFromServer = async (movieListId) => {
         },
       }
     );
-    return response.data; // AI Story id
-  } catch (error) {
-    console.error("Error fetching AI id:", error);
-  }
-};
+    const match = uploadResponse.data.match(/movieListId\s*=\s*(\d+)/);
+    movieListId = match ? parseInt(match[1], 10) : null;
+    if (!movieListId) throw new Error("movieListId를 추출할 수 없습니다.");
 
-// upload aiStoryId -> fetch AI Story Text
-const fetchAITextFromServer = async (aiStoryId) => {
+    console.log("movieListId:", movieListId);
+  } catch (error) {
+    console.error("Error uploading poster:", error);
+    return null; // 이후 요청 중단
+  }
+
+  // upload movieListId -> fetch AI Story id
   try {
-    const response = await axios.get(`${BACKEND_URL}/movie/aiStory`, {
+    const storyResponse = await axios.post(
+      `${BACKEND_URL}/movie/getStory`,
+      new URLSearchParams({ movieListId }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    aiStoryId = storyResponse.data;
+    if (!aiStoryId) throw new Error("aiStoryId를 가져올 수 없습니다.");
+
+    console.log("aiStoryId:", storyResponse.data);
+  } catch (error) {
+    console.error("Error fetching AI Story id:", error);
+    return null; // 이후 요청 중단
+  }
+
+  // upload aiStoryId -> fetch AI Story Text
+  try {
+    const textResponse = await axios.get(`${BACKEND_URL}/movie/aiStory`, {
       params: { aiStoryId },
     });
 
-    return response.data;
+    console.log("AI Story Text:", textResponse.data);
+    return textResponse.data;
   } catch (error) {
-    console.error("Error fetching AI story:", error);
+    console.error("Error fetching AI Story:", error);
+    return null;
   }
 };
 
@@ -88,8 +103,6 @@ function UploadPoster() {
   const [files, setFiles] = useState([]);
   const [posterUrls, setPosterUrls] = useState("");
 
-  const [movieListId, setMovieListId] = useState("");
-  const [aiStoryId, setAIStoryId] = useState("");
   const [AItext, setAItext] = useState("");
 
   const navigate = useNavigate();
@@ -144,9 +157,7 @@ function UploadPoster() {
       formData.append("files", files[i]);
     }
 
-    setMovieListId(uploadPosterToServer(formData));
-    setAIStoryId(fetchAIStoryIdFromServer(movieListId));
-    setAItext(fetchAITextFromServer(aiStoryId));
+    processMoviePoster(formData);
 
     // 밑에 지우기!
     /*
