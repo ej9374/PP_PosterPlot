@@ -15,6 +15,8 @@ public class PostListHomeResponseDto {
     @Schema(example = "title")
     private String title;
 
+    private Integer userId;
+
     @Schema(example = "user123")
     private String id;
 
@@ -22,9 +24,10 @@ public class PostListHomeResponseDto {
 
     private String movie2ndPath;
 
-    public PostListHomeResponseDto(Integer postId, String title, String id, String movie1stPath, String movie2ndPath) {
+    public PostListHomeResponseDto(Integer postId, String title, Integer userId, String id, String movie1stPath, String movie2ndPath) {
         this.postId = postId;
         this.title = title;
+        this.userId = userId;
         this.id = id;
         this.movie1stPath = movie1stPath;
         this.movie2ndPath = movie2ndPath;

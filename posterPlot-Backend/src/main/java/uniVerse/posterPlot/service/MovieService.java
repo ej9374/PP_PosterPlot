@@ -27,6 +27,7 @@ import uniVerse.posterPlot.repository.UserRepository;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +119,7 @@ public class MovieService {
     public Integer sendMovieListToFlask(Integer movieListId) {
 
         WebClient webClient = WebClient.builder()
-                .baseUrl("http://127.0.0.1:5000") //Flask API URL
+                .baseUrl("http://flask:5000") //Flask API URL
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
@@ -148,6 +149,9 @@ public class MovieService {
                         return Mono.error(new RuntimeException("Flask API 오류 발생: " + response.bodyToMono(String.class).block()));
                     })
                     .bodyToMono(ReceiveFlaskResponseDto.class)
+                    .retryWhen(reactor.util.retry.Retry.fixedDelay(30, Duration.ofSeconds(15))
+                            .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) ->
+                                    new RuntimeException("🚨 Flask API 재시도 실패: 최대 시도 횟수 초과")))
                     .block();
 
             if (flaskResponseDto == null){

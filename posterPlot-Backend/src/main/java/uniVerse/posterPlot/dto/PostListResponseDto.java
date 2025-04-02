@@ -15,12 +15,17 @@ public class PostListResponseDto {
     @Schema(example = "title")
     private String title;
 
+    @Schema(example = "1")
+    private Integer userId;
+
     @Schema(example = "user123")
     private String id;
 
-    public PostListResponseDto(Integer postId, String title, String id) {
+
+    public PostListResponseDto(Integer postId, String title, Integer userId, String id) {
         this.postId = postId;
         this.title = title;
+        this.userId = userId;
         this.id = id;
     }
 }
