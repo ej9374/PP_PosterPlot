@@ -87,7 +87,7 @@ AI 기반 영화 줄거리 생성과 유저 작성 시나리오 열람 기능을
 
 ---
 
-### AI 서비스 (`posterplot_ai.py`) 실행 방법
+### AI 서비스 (`posterplot_ai.py`) 실행
 
 `posterplot_ai.py`는 Flask 기반 AI 생성기 서버로, BLIP 및 Mistral 모델을 사용합니다.
 
