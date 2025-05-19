@@ -16,6 +16,14 @@ AI 기반 영화 줄거리 생성과 유저 작성 시나리오 열람 기능을
 | redis           | 이메일 인증 및 확인용 Redis 서버         | `localhost:6379`       |
 
 ---
+## 환경 변수 파일 안내
+
+- **프론트엔드**: `posterplot_frontend/.env`  
+  - 예: `REACT_APP_BACKEND_URL=http://localhost:8080`
+
+- **AI 서비스**: `ai_service/.env`  
+  - 예: `HF_TOKEN` (HuggingFace API 토큰) 등
+---
 
 ## 프로젝트 실행방법
 
