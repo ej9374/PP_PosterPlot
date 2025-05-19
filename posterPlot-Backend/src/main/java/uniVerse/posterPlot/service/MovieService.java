@@ -119,7 +119,7 @@ public class MovieService {
     public Integer sendMovieListToFlask(Integer movieListId) {
 
         WebClient webClient = WebClient.builder()
-                .baseUrl("http://flask:5000") //Flask API URL
+                .baseUrl("http://localhost:5000") //Flask API URL
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
