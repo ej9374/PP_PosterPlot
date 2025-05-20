@@ -68,8 +68,13 @@ AI 기반 영화 줄거리 생성과 유저 작성 시나리오 열람 기능을
  4. 서비스 계정 > 권한 > 저장소 관리자, 저장소 개체 관리자 추가
  5. 버킷 생성 > src/main/resources/gcp-keys/ 안에 키 저장 후 실행
 
+#### 4. Google 이메일 인증
 
-#### 4. Gradle 빌드
+  1. https://myaccount.google.com/security 에 접속하여 2단계 인증 활성화
+  2. 앱 비밀번호를 생성하여 SMTP 인증용 비밀번호 발급
+  3. application.properties에 `spring.mail.username`, `spring.mail.password` 수정
+     
+#### 5. Gradle 빌드
 
 - 터미널 또는 명령 프롬프트에서 다음 명령어를 실행합니다.
 
@@ -77,7 +82,7 @@ AI 기반 영화 줄거리 생성과 유저 작성 시나리오 열람 기능을
 ./gradlew build
 ```
 
-#### 5. Spring Boot 애플리케이션 실행
+#### 6. Spring Boot 애플리케이션 실행
 
 - 다음 명령어로 애플리케이션을 실행합니다.
 
