@@ -72,7 +72,7 @@ AI 기반 영화 줄거리 생성과 유저 작성 시나리오 열람 기능을
 
   1. https://myaccount.google.com/security 에 접속하여 2단계 인증 활성화
   2. 앱 비밀번호를 생성하여 SMTP 인증용 비밀번호 발급
-  3. application.properties에 `spring.mail.username`, `spring.mail.password` 수정
+  3. .env 생성 후 application.properties의 값 저장
      
 #### 5. Gradle 빌드
 
